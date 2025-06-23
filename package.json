@@ -1,0 +1,17 @@
+{
+  "name": "vanila-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "esbuild src/index.ts --bundle --outfile=dist/index.js --watch --servedir=."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.25.5",
+    "typescript": "^5.8.3"
+  }
+}
