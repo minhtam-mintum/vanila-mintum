@@ -1,6 +1,6 @@
 export interface InputAttributes
   extends Partial<HTMLInputElement> {
-  type: "string" | "number";
+  type: "text" | "number" | "password";
   name: string
 }
 export interface OptionsInput {

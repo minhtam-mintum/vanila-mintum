@@ -1,10 +1,15 @@
-import { InputAttributes, OptionsInput } from "./types";
+import createLabel from "../Label/index";
+import createTextField from "../TextField/index";
+import mergeClass from "../utils/mergeClass";
+import randomKey from "../utils/randomKey";
+import { OptionsInput } from "./types";
 
 export default class Input {
   private state;
   constructor(id: string, options: OptionsInput) {
     this.state = {
       id,
+      className: `flex flex-col gap-1 ${options.className}`,
       ...options,
     };
   }
@@ -13,42 +18,37 @@ export default class Input {
       this.state.id
     );
     if (formInput) {
+      const key =
+        this.state.input.id ??
+        `mintum-${
+          this.state.input.name
+        }-${randomKey()}`;
       let label: HTMLLabelElement | undefined;
       if (this.state.label) {
-        label = document.createElement("label");
-        label.setAttribute(
-          "className",
-          this.state.label?.className ?? ""
+        label = createLabel(
+          key,
+          this.state.label
         );
-        label.innerText =
-          this.state.label?.text ?? "";
         formInput.appendChild(label);
       }
-      const input =
-        document.createElement("input");
-      (
-        Object.keys(this.state.input) as Array<
-          keyof InputAttributes
-        >
-      ).forEach((key: keyof InputAttributes) => {
-        input.setAttribute(
-          key,
-          String(
-            this.state.input[
-              key as keyof InputAttributes
-            ]
-          )
-        );
-      });
-      if (this.state.onChange) {
-        input.addEventListener(
-          "input",
-          (ev: Event) => {
-            this.state.onChange?.(ev);
-          }
-        );
-      }
+      const input = createTextField(
+        this.state.input as HTMLInputElement,
+        key
+      );
+      input.onkeydown = (ev: KeyboardEvent) => {
+        if (
+          this.state.input.type === "number" &&
+          Number.isNaN(Number(ev.key))
+        ) {
+          ev.preventDefault();
+        }
+      };
+      input.onchange = (ev: Event) => {
+        this.state.onChange?.(ev);
+      };
+
       formInput.appendChild(input);
+      mergeClass(formInput, this.state.className);
     }
     return formInput;
   };

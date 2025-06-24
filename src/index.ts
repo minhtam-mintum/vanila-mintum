@@ -1,14 +1,19 @@
 import Input from "./Input/index";
-const input = new Input('vanila-input', {
-  label: {
-    text: 'Label'
-  },
-  input: {
-    type: 'string',
-    name: 'test'
-  },
-  onChange: (event) => {
-    console.log('check event', event);
-  },
-})
-input.init();
+const handleInit = (name: string, label: string) => {
+  const input = new Input(name, {
+    label: {
+      text: label
+    },
+    input: {
+      type: name === 'age' ? 'number' : 'text',
+      name,
+    },
+    onChange: (event) => {
+      console.log('check event', name, event);
+    },
+  })
+  input.init();
+}
+handleInit('lastname', 'Last Name')
+handleInit('firstname', 'First Name')
+handleInit('age', 'Age')
